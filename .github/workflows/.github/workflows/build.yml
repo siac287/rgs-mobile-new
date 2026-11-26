@@ -1,0 +1,36 @@
+name: Build APK
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code download karo
+        uses: actions/checkout@v4
+
+      - name: Java 17 lagao
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Android SDK lagao
+        uses: android-actions/setup-android@v3
+
+      - name: Gradle lagao
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - name: APK banao
+        run: gradle assembleDebug --no-daemon
+
+      - name: APK upload karo
+        uses: actions/upload-artifact@v4
+        with:
+          name: RGS-Staff-Portal-APK
+          path: app/build/outputs/apk/debug/app-debug.apk
